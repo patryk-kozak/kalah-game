@@ -1,7 +1,7 @@
 package com.softwaremind.pakz.kalah.api;
 
-import com.softwaremind.pakz.kalah.BoardProvider;
-import com.softwaremind.pakz.kalah.GameplayService;
+import com.softwaremind.pakz.kalah.game.GameProvider;
+import com.softwaremind.pakz.kalah.game.GameplayService;
 import com.softwaremind.pakz.kalah.IllegalMoveException;
 import com.softwaremind.pakz.kalah.model.Board;
 import com.softwaremind.pakz.kalah.model.Pit;
@@ -19,24 +19,24 @@ import java.util.stream.Collectors;
 public class GameApi {
 
     private final GameplayService gameplayService;
-    private final BoardProvider boardProvider;
+    private final GameProvider gameProvider;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse setup() {
-        long id = boardProvider.prepareNewBoard();
+        long gameId = gameProvider.prepareNewBoard();
         return ApiResponse.builder()
-                .id(id)
-                .url(processUrl(id))
+                .id(gameId)
+                .url(processUrl(gameId))
                 .build();
     }
 
     @PutMapping(value = "/{id}/pits/{pitId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse move(@PathVariable long id, @PathVariable int pitId) throws IllegalMoveException {
-        Board updatedBoard = gameplayService.makeMove(id, pitId);
+    public ApiResponse move(@PathVariable("id") long gameId, @PathVariable int pitId) throws IllegalMoveException {
+        Board updatedBoard = gameplayService.makeMove(gameId, pitId);
         return ApiResponse.builder()
-                .id(id)
-                .url(processUrl(id))
+                .id(gameId)
+                .url(processUrl(gameId))
                 .status(
                         updatedBoard.getPits().stream()
                                 .collect(Collectors.toMap(Pit::getNumber, Pit::getValue))
@@ -44,11 +44,11 @@ public class GameApi {
                 .build();
     }
 
-    private String processUrl(long id) {
+    private String processUrl(long gameId) {
         return ServletUriComponentsBuilder
                 .fromCurrentServletMapping()
-                .path("/games/{id}")
-                .buildAndExpand(id)
+                .path("/games/{gameId}")
+                .buildAndExpand(gameId)
                 .toUriString();
     }
 

@@ -1,4 +1,4 @@
-package com.softwaremind.pakz.kalah;
+package com.softwaremind.pakz.kalah.game;
 
 import com.softwaremind.pakz.kalah.model.Board;
 import com.softwaremind.pakz.kalah.model.Pit;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 @Service
-public class BoardProvider {
+public class GameProvider {
 
     private final Map<Long, Board> games = new HashMap<>();
 
@@ -25,6 +25,7 @@ public class BoardProvider {
         Pit northStore = new Pit(7, PitType.STORE);
         northStore.clear();
         pits.set(6, northStore);
+
         Pit southStore = new Pit(14, PitType.STORE);
         southStore.clear();
         pits.set(13, southStore);

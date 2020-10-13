@@ -1,5 +1,9 @@
-package com.softwaremind.pakz.kalah;
+package com.softwaremind.pakz.kalah.game;
 
+import com.softwaremind.pakz.kalah.BoardFixture;
+import com.softwaremind.pakz.kalah.IllegalMoveException;
+import com.softwaremind.pakz.kalah.game.GameProvider;
+import com.softwaremind.pakz.kalah.game.GameplayService;
 import com.softwaremind.pakz.kalah.model.Board;
 import com.softwaremind.pakz.kalah.model.Pit;
 import org.junit.jupiter.api.Test;
@@ -11,14 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class GameplayServiceTest {
 
     @Mock
-    private BoardProvider boardProviderMock;
+    private GameProvider gameProviderMock;
 
     @InjectMocks
     private GameplayService gameplayService;
@@ -27,7 +30,7 @@ class GameplayServiceTest {
     void shouldMakeMoveAndReturnBoard() throws IllegalMoveException {
         // given
         long gameId = 1L;
-        given(boardProviderMock.retrieveBoard(gameId)).willReturn(BoardFixture.initBoard());
+        given(gameProviderMock.retrieveBoard(gameId)).willReturn(BoardFixture.initBoard());
 
         // when
         List<Pit> pits = gameplayService.makeMove(gameId, 1).getPits();
@@ -38,30 +41,9 @@ class GameplayServiceTest {
     }
 
     @Test
-    void disallowMoveWhenPitIsStore() {
-        // given
-        long gameId = 1L;
-        given(boardProviderMock.retrieveBoard(gameId)).willReturn(BoardFixture.initBoard());
-
-        assertThatExceptionOfType(IllegalMoveException.class)
-                .isThrownBy(() -> gameplayService.makeMove(gameId, 7))
-                .withMessage("Can't make move from player store!");
-    }
-
-    @Test
-    void disallowMoveWhenPitIsEmpty() {
-        long gameId = 1L;
-        given(boardProviderMock.retrieveBoard(gameId)).willReturn(BoardFixture.firstPitEmpty());
-
-        assertThatExceptionOfType(IllegalMoveException.class)
-                .isThrownBy(() -> gameplayService.makeMove(gameId, 1))
-                .withMessage("This pit is empty, can't make a move.");
-    }
-
-    @Test
     void finishAndSumUpScore() throws IllegalMoveException {
         long gameId = 11235;
-        given(boardProviderMock.retrieveBoard(gameId)).willReturn(
+        given(gameProviderMock.retrieveBoard(gameId)).willReturn(
                 BoardFixture.lastPitForSouth()
         );
 
@@ -74,7 +56,7 @@ class GameplayServiceTest {
     @Test
     void makeMoveFromNorthSide() throws IllegalMoveException {
         long gameId = 11235;
-        given(boardProviderMock.retrieveBoard(gameId)).willReturn(
+        given(gameProviderMock.retrieveBoard(gameId)).willReturn(
                 BoardFixture.lastPitForSouth()
         );
 

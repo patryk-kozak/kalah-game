@@ -1,26 +1,24 @@
-package com.softwaremind.pakz.kalah;
+package com.softwaremind.pakz.kalah.game;
 
+import com.softwaremind.pakz.kalah.IllegalMoveException;
 import com.softwaremind.pakz.kalah.model.Board;
 import com.softwaremind.pakz.kalah.model.Pit;
 import com.softwaremind.pakz.kalah.model.PitType;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class GameplayService {
+class GameMaster {
 
-    private final BoardProvider boardProvider;
+    private final Board board;
 
-    public Board makeMove(long id, int pitId) throws IllegalMoveException {
-        Board board = boardProvider.retrieveBoard(id);
-        List<Pit> pits = board.getPits();
+    public GameMaster(Board board) {
+        this.board = board;
+    }
 
-        Pit pit = pits.get(pitId - 1);
+    public void validateMove(int pitId) throws IllegalMoveException {
+        Pit pit = this.board.getPits().get(pitId - 1);
         if (pit.getType().equals(PitType.STORE)) {
             throw new IllegalMoveException("Can't make move from player store!");
         }
@@ -29,12 +27,18 @@ public class GameplayService {
         if (pitValue == 0) {
             throw new IllegalMoveException("This pit is empty, can't make a move.");
         }
+    }
+
+    public Board move(int pitId) {
+        List<Pit> pits = this.board.getPits();
+        Pit pit = this.board.getPits().get(pitId - 1);
+        int value = pit.getValue();
+        pit.clear();
 
         int i = 0;
-        pit.clear();
         int index = pitId;
         int indexI = 0;
-        while (i < pitValue) {
+        while (i < value) {
             if (index + indexI == 14) {
                 index = 0;
                 indexI = 0;
@@ -43,22 +47,15 @@ public class GameplayService {
             i++;
             indexI++;
         }
-
-        if (eitherHouseSideIsEmpty(pits)) {
-            board.finish();
-            board.sumUpScore();
-        }
-
-        return board;
+        return this.board;
     }
 
-    private boolean eitherHouseSideIsEmpty(List<Pit> pits) {
-        Map<Boolean, List<Pit>> sides = pits.stream()
+    public boolean isEitherHouseSideIsEmpty() {
+        Map<Boolean, List<Pit>> sides = this.board.getPits().stream()
                 .filter(p -> p.getType().equals(PitType.HOUSE))
                 .collect(Collectors.partitioningBy(p -> p.getNumber() < 7));
 
         return sides.get(true).stream().allMatch(p -> p.getValue() == 0)
                 || sides.get(false).stream().allMatch(p -> p.getValue() == 0);
     }
-
 }

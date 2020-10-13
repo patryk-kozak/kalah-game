@@ -1,7 +1,7 @@
 package com.softwaremind.pakz.kalah.api;
 
-import com.softwaremind.pakz.kalah.BoardProvider;
-import com.softwaremind.pakz.kalah.GameplayService;
+import com.softwaremind.pakz.kalah.game.GameProvider;
+import com.softwaremind.pakz.kalah.game.GameplayService;
 import com.softwaremind.pakz.kalah.IllegalMoveException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = GameApi.class)
-@Import({GameplayService.class, BoardProvider.class, ApiExceptionHandler.class})
+@Import({GameplayService.class, GameProvider.class, ApiExceptionHandler.class})
 class ApiExceptionHandlerIT {
 
     @Autowired

@@ -38,7 +38,7 @@ public class BoardFixture {
         return new Board(customPits);
     }
 
-    public static Board emptyPitsForSouth() {
+    public static Board emptyPitsForNorth() {
         List<Pit> customPits = List.of(
                 PitFixture.customValuePit(1, 0, PitType.HOUSE),
                 PitFixture.customValuePit(2, 0, PitType.HOUSE),

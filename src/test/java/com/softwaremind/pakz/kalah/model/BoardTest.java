@@ -20,7 +20,7 @@ class BoardTest {
 
     @Test
     void shouldSumUpAllPitsForEachPlayerWhenFinished() {
-        Board board = BoardFixture.emptyPitsForSouth();
+        Board board = BoardFixture.emptyPitsForNorth();
 
         board.sumUpScore();
 
