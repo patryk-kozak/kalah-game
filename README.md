@@ -1,6 +1,6 @@
 # Kalah Game implementation
 
-#### Wikipedia Description
+### Wikipedia Description
 > The game provides a Kalah board and a number of seeds or counters. The board has 6 small pits, called houses, on each side; and a big pit, called an end zone, at each end. The object of the game is to capture more seeds than one's opponent.
   At the beginning of the game, four seeds are placed in each house. This is the traditional method.
   Each player controls the six houses and their seeds on the player's side of the board. The player's score is the number of seeds in the store to their right.
@@ -15,14 +15,25 @@ In order to build and run this project you need this version of Java setup.
 
 Project is using Maven and there is included Maven Wrapper so just use `./mvnw` for Unix based systems and `mvnw.cmd` for Win32.
 
-#### Game Description
+To build it just run:
+```
+./mvnw clean package
+```
+
+### Game Description
 Pits from 1-6 are houses of North player and pit number 7 is store.
 
 Pits from 8-13 are houses of South player and pit number 14 is store.
 
 You can only move stones from houses.
 
-#### API
+### API
+To access Swagger Docoumentation visit:
+```
+http://localhost:8080/swagger-ui/
+```
+> =============
+
 To start a new game, use:
 ```
 curl -X POST http://localhost:8080/games/
