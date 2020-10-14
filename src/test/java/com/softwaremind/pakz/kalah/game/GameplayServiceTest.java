@@ -53,18 +53,4 @@ class GameplayServiceTest {
                 .containsExactly(0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 54);
     }
 
-    @Test
-    void makeMoveFromNorthSide() throws IllegalMoveException {
-        long gameId = 11235;
-        given(gameProviderMock.retrieveBoard(gameId)).willReturn(
-                BoardFixture.lastPitForSouth()
-        );
-
-        Board board = gameplayService.makeMove(gameId, 11);
-
-        assertThat(board.getPits()).extracting(Pit::getValue)
-                .containsExactly(1, 1, 1, 1, 1, 2, 17, 0, 2, 1, 0, 5, 3, 37);
-    }
-
-
 }

@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class that holds all the game rules and decide on outcome
+ */
 class GameMaster {
 
     private final Board board;
@@ -35,18 +38,16 @@ class GameMaster {
         int value = pit.getValue();
         pit.clear();
 
-        int i = 0;
         int index = pitId;
-        int indexI = 0;
-        while (i < value) {
-            if (index + indexI == 14) {
+
+        for (int moveCount = 0, overflowIndex = 0; moveCount < value; moveCount++, overflowIndex++) {
+            if (index + overflowIndex == 14) {
                 index = 0;
-                indexI = 0;
+                overflowIndex = 0;
             }
-            pits.get(index + indexI).add();
-            i++;
-            indexI++;
+            pits.get(index + overflowIndex).add();
         }
+
         return this.board;
     }
 

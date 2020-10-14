@@ -2,7 +2,6 @@ package com.softwaremind.pakz.kalah.game;
 
 import com.softwaremind.pakz.kalah.BoardFixture;
 import com.softwaremind.pakz.kalah.IllegalMoveException;
-import com.softwaremind.pakz.kalah.game.GameMaster;
 import com.softwaremind.pakz.kalah.model.Board;
 import com.softwaremind.pakz.kalah.model.Pit;
 import org.junit.jupiter.api.Test;
@@ -45,4 +44,18 @@ class GameMasterTest {
 
         assertThat(gameMaster.isEitherHouseSideIsEmpty()).isTrue();
     }
+
+
+    @Test
+    void makeMoveFromNorthSide() {
+        GameMaster gameMaster = new GameMaster(
+                BoardFixture.lastPitForSouth()
+        );
+
+        Board board = gameMaster.move(11);
+
+        assertThat(board.getPits()).extracting(Pit::getValue)
+                .containsExactly(1, 1, 1, 1, 1, 2, 17, 0, 2, 1, 0, 5, 3, 37);
+    }
+
 }
